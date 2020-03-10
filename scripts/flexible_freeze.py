@@ -23,8 +23,8 @@ def timestamp():
     now = time.time()
     return time.strftime("%Y-%m-%d %H:%M:%S %Z")
 
-if sys.version_info[:2] not in ((2,6), (2,7),):
-    print >>sys.stderr, "python 2.6 or 2.7 required; you have %s" % sys.version
+if sys.version_info[:2] not in ((2,6), (2,7),(3,6),(3,7),):
+    print >>sys.stderr, "python 2.6б 2.7 required; you have %s" % sys.version
     exit(1)
 
 parser = argparse.ArgumentParser()
@@ -72,7 +72,7 @@ args = parser.parse_args()
 
 def debug_print(some_message):
     if args.debug:
-        print >>sys.stderr, ('DEBUG (%s): ' % timestamp()) + some_message
+        print("DEBUG ({timestamp}): {msg}".format(timestamp=timestamp(), msg= some_message), file=sys.stderr)
 
 def verbose_print(some_message):
     if args.verbose:
@@ -80,9 +80,9 @@ def verbose_print(some_message):
 
 def _print(some_message):
     if args.print_timestamps:
-        print "{timestamp}: {some_message}".format(timestamp=timestamp(), some_message=some_message)
+        print ("{timestamp}: {some_message}".format(timestamp=timestamp(), some_message=some_message))
     else:
-        print some_message
+        print (some_message)
     sys.stdout.flush()
     return True
 
@@ -264,7 +264,7 @@ for db in dblist:
     verbose_print("getting list of tables")
 
     table_resultset = cur.fetchall()
-    tablist = map(lambda(row): row[0], table_resultset)
+    tablist = map(lambda row: row[0], table_resultset)
 
     # for each table in list
     for table in tablist:
